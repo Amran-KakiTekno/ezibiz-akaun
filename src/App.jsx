@@ -172,7 +172,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <a 
-              href="https://bizops-portal.pages.dev" 
+              href="https://bizops-portal-86i.pages.dev" 
               className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-colors flex items-center gap-1.5 text-xs font-medium"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -540,3 +540,4 @@ export default function App() {
     </div>
   );
 }
+
