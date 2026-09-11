@@ -44,26 +44,26 @@ export default function FinancialDataGrid({
   };
 
   return (
-    <div className="w-full overflow-hidden rounded-xl border border-white/[0.08] bg-black/70 shadow-rim">
+    <div className="w-full overflow-hidden rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-black/70 shadow-sm dark:shadow-rim">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-white/[0.08] bg-zinc-950/80 text-[11px] font-mono uppercase tracking-wider text-zinc-400">
+            <tr className="border-b border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-zinc-950/80 text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-400">
               {columns.map((col, idx) => (
                 <th
                   key={idx}
-                  className={`py-3 px-4 ${col.align === 'right' ? 'text-right' : col.align === 'center' ? 'text-center' : 'text-left'}`}
+                  className={`py-3.5 px-4 ${col.align === 'right' ? 'text-right' : col.align === 'center' ? 'text-center' : 'text-left'}`}
                 >
                   {col.header}
                 </th>
               ))}
-              <th className="py-3 px-4 text-right">Tindakan</th>
+              <th className="py-3.5 px-4 text-right">Tindakan</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/[0.04] text-xs">
+          <tbody className="divide-y divide-slate-100 dark:divide-white/[0.04] text-xs">
             {data.length === 0 ? (
               <tr>
-                <td colSpan={columns.length + 1} className="py-12 text-center text-zinc-500 font-mono">
+                <td colSpan={columns.length + 1} className="py-12 text-center text-slate-400 dark:text-zinc-500 font-mono">
                   {emptyMessage}
                 </td>
               </tr>
@@ -76,8 +76,8 @@ export default function FinancialDataGrid({
                     onClick={() => onSelectRow && onSelectRow(row)}
                     className={`group transition-colors duration-150 cursor-pointer ${
                       isVoided 
-                        ? 'opacity-50 hover:bg-rose-950/10' 
-                        : 'hover:bg-zinc-900/60'
+                        ? 'opacity-50 hover:bg-rose-50 dark:hover:bg-rose-950/10' 
+                        : 'hover:bg-slate-50/80 dark:hover:bg-zinc-900/60'
                     }`}
                   >
                     {columns.map((col, colIdx) => {
@@ -88,47 +88,47 @@ export default function FinancialDataGrid({
                       return (
                         <td
                           key={colIdx}
-                          className={`py-3 px-4 text-zinc-300 ${
+                          className={`py-3 px-4 text-slate-700 dark:text-zinc-300 ${
                             col.align === 'right' ? 'text-right' : col.align === 'center' ? 'text-center' : 'text-left'
                           }`}
                         >
                           {isStatus ? (
                             getStatusBadge(val)
                           ) : isMoney ? (
-                            <span className="font-mono tabular-nums text-zinc-100 font-medium">
+                            <span className="font-mono tabular-nums text-slate-900 dark:text-zinc-100 font-medium">
                               RM {Number(val || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </span>
                           ) : col.isMono ? (
-                            <span className="font-mono text-zinc-400 text-[11px]">{val}</span>
+                            <span className="font-mono text-slate-500 dark:text-zinc-400 text-[11px]">{val}</span>
                           ) : (
-                            <span className="font-medium text-zinc-200">{val}</span>
+                            <span className="font-medium text-slate-800 dark:text-zinc-200">{val}</span>
                           )}
                         </td>
                       );
                     })}
                     <td className="py-3 px-4 text-right" onClick={(e) => e.stopPropagation()}>
-                      <div className="flex items-center justify-end gap-1.5 opacity-80 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center justify-end gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
                         {onSelectRow && (
                           <button
                             type="button"
                             onClick={() => onSelectRow(row)}
-                            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+                            className="p-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-lg text-slate-400 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
                             title="Buka Baucar / Invois"
                           >
-                            <FileText className="w-3.5 h-3.5" />
+                            <FileText className="w-4 h-4" />
                           </button>
                         )}
                         {onVoidRow && !isVoided && (
                           <button
                             type="button"
                             onClick={() => onVoidRow(row)}
-                            className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-400 hover:bg-rose-950/30 transition-colors"
+                            className="p-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-lg text-slate-400 dark:text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
                             title="Batalkan (Void Transaksi)"
                           >
-                            <RotateCcw className="w-3.5 h-3.5" />
+                            <RotateCcw className="w-4 h-4" />
                           </button>
                         )}
-                        <ArrowUpRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-300 transition-colors" />
+                        <ArrowUpRight className="w-4 h-4 text-slate-300 dark:text-zinc-600 group-hover:text-slate-600 dark:group-hover:text-zinc-300 transition-colors shrink-0 ml-1" />
                       </div>
                     </td>
                   </tr>
