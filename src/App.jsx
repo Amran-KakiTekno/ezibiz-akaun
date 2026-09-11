@@ -57,7 +57,7 @@ export default function App() {
 
   // 4. Rekod Perbelanjaan (Operating Expenses / Opex)
   const [expenses, setExpenses] = useState([
-    { id: 1, date: '2026-09-01', category: 'Sewa Premis / Pajakan', desc: 'Sewa Bengkel Lot 5412 Gong Nangka', amount: 3200.00, method: 'Maybank', ref: 'PV-001', voucherNo: 'PV-2026-001' },
+    { id: 1, date: '2026-09-01', category: 'Sewa Premis / Pajakan', desc: 'Sewa Pejabat & Premis Perniagaan Bangsar', amount: 3200.00, method: 'Maybank', ref: 'PV-001', voucherNo: 'PV-2026-001' },
     { id: 2, date: '2026-09-05', category: 'Gaji dan Upah', desc: 'Gaji Pekerja Operasi (4 Staf)', amount: 6800.00, method: 'Maybank', ref: 'PV-002', voucherNo: 'PV-2026-002' },
     { id: 3, date: '2026-09-05', category: 'KWSP & SOCSO', desc: 'Caruman KWSP & PERKESO Bulan Ogos', amount: 1420.00, method: 'Maybank', ref: 'PV-003', voucherNo: 'PV-2026-003' },
     { id: 4, date: '2026-09-06', category: 'Elektrik dan Air / Utiliti', desc: 'Bil TNB & Syabas Bulan Ogos', amount: 840.00, method: 'JomPAY', ref: 'PV-004', voucherNo: 'PV-2026-004' },
@@ -741,9 +741,9 @@ export default function App() {
             <div className="lg:col-span-8 rounded-2xl bg-white text-slate-900 p-8 space-y-6 shadow-2xl">
               <div className="flex justify-between items-start border-b border-slate-300 pb-4">
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900 tracking-tight">SYNERGYWAVE SOLUTION</h3>
-                  <p className="text-xs text-slate-600">LOT 5412 GONG NANGKA, 22200 KAMPUNG RAJA, TERENGGANU</p>
-                  <p className="text-xs text-slate-600">Tel: +60 17 9526020 | E-mel: erieybst@gmail.com</p>
+                  <h3 className="text-lg font-bold text-slate-900 tracking-tight">PUNCAK UTAMA SDN BHD</h3>
+                  <p className="text-xs text-slate-600">LEVEL 12, MENARA BANGSAR, NO. 8 JALAN BANGSAR UTAMA 1, 59000 KUALA LUMPUR</p>
+                  <p className="text-xs text-slate-600">Tel: +60 3-2282 1199 | E-mel: kewangan@puncakutama.com.my | No. Pendaftaran: 202301038192 (1508821-M)</p>
                 </div>
                 <div className="text-right">
                   <span className="text-xl font-extrabold text-slate-900">BAUCAR BAYARAN</span>
