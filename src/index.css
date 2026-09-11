@@ -4,23 +4,146 @@
 
 @layer base {
   body {
-    @apply bg-slate-950 text-slate-100 antialiased selection:bg-indigo-500 selection:text-white min-h-screen;
+    @apply bg-black text-zinc-100 antialiased selection:bg-emerald-500/20 selection:text-emerald-200 min-h-screen;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Prevent iOS Safari aggressive auto-zoom on focus */
+  input, select, textarea {
+    font-size: 16px;
+  }
+  @media (min-width: 640px) {
+    input, select, textarea {
+      font-size: 0.75rem;
+    }
   }
 }
 
-/* Custom smooth scrollbar */
+/* Custom smooth scrollbar in obsidian tone */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #000000;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #27272a;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #3f3f46;
 }
+
+/* Recent.design active dot indicator */
+.sidebar-active-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background-color: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
+}
+
+/* Print Styles for Baucar Bayaran (Payment Voucher) */
+@media print {
+  /* Page configuration: clean A4 print margin */
+  @page {
+    size: A4 portrait;
+    margin: 15mm;
+  }
+
+  /* Reset body and html backgrounds to clean white and ensure black typography */
+  html,
+  body,
+  #root {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: auto !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Hide app chrome: header, navigation tabs, KPI row, toasts, buttons, sidebars, modals */
+  header,
+  nav,
+  button,
+  .no-print,
+  .print\:hidden,
+  .app-header,
+  .kpi-row,
+  .tab-nav,
+  .voucher-sidebar,
+  .toast-notification,
+  .modal-backdrop,
+  [role="tablist"] {
+    display: none !important;
+  }
+
+  /* Expand main container layout */
+  main {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  /* Voucher container grid override for print */
+  .voucher-container-grid {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Voucher paper canvas expands to full page width on clean white background with black ink typography */
+  .printable-voucher {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    page-break-inside: avoid;
+  }
+
+  .printable-voucher * {
+    color: #000000 !important;
+    text-shadow: none !important;
+  }
+
+  .printable-voucher .border-slate-300,
+  .printable-voucher .border-slate-200,
+  .printable-voucher .border-slate-400 {
+    border-color: #94a3b8 !important;
+  }
+
+  .printable-voucher .bg-slate-50,
+  .printable-voucher .bg-slate-100 {
+    background-color: #f8fafc !important;
+  }
+
+  .printable-voucher table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  .printable-voucher th,
+  .printable-voucher td {
+    border: 1px solid #94a3b8 !important;
+  }
+
+  .printable-voucher th {
+    background-color: #f1f5f9 !important;
+    font-weight: 700 !important;
+  }
+}
+
+
