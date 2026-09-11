@@ -170,7 +170,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <a 
-              href="https://bizops-portal-86i.pages.dev" 
+              href="https://ezibiz-hub.pages.dev" 
               className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-colors flex items-center gap-1.5 text-xs font-medium"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -182,7 +182,7 @@ export default function App() {
                 <Receipt className="w-4 h-4" />
               </div>
               <div>
-                <span className="font-bold text-base text-white tracking-tight">BizOps Ezi-Akaun & Inventori</span>
+                <span className="font-bold text-base text-white tracking-tight">EziBiz Akaun & Inventori</span>
                 <span className="text-[10px] font-mono px-2 py-0.5 ml-2 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                   XLS-Compliant
                 </span>
@@ -199,7 +199,7 @@ export default function App() {
               <span>Penyata Untung Rugi</span>
             </button>
             <a 
-              href="https://github.com/Amran-KakiTekno/bizops-invoicing" 
+              href="https://github.com/Amran-KakiTekno/ezibiz-akaun" 
               target="_blank" 
               rel="noreferrer"
               className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-colors"
