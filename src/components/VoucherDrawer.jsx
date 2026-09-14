@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { X, Printer, Download, CheckCircle2, QrCode, ShieldCheck, ArrowUpRight } from 'lucide-react';
+import { formatRM, COMPANY_INFO } from '../App';
 
 export default function VoucherDrawer({
   isOpen,
@@ -89,12 +90,12 @@ export default function VoucherDrawer({
                 <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-600 dark:text-emerald-400 font-semibold print:text-emerald-700">
                   EziBiz Akaun • Financial Studio
                 </span>
-                <h2 className="text-lg font-bold text-slate-900 dark:text-white print:text-black mt-1">KakiTekno Global Inc.</h2>
+                <h2 className="text-lg font-bold text-slate-900 dark:text-white print:text-black mt-1">{COMPANY_INFO.name}</h2>
                 <p className="text-xs text-slate-500 dark:text-zinc-400 print:text-zinc-600 mt-0.5">
-                  No. Pendaftaran: 202601008812 (SSM Valid)
+                  No. Pendaftaran: {COMPANY_INFO.regNo}
                 </p>
                 <p className="text-xs text-slate-500 dark:text-zinc-500 print:text-zinc-600">
-                  Kuala Lumpur, Malaysia • support@kakitekno.com
+                  {COMPANY_INFO.location} • {COMPANY_INFO.email}
                 </p>
               </div>
 
@@ -150,10 +151,10 @@ export default function VoucherDrawer({
                     {record.qty || 1} Unit
                   </td>
                   <td className="py-3 px-4 text-right font-mono tabular-nums text-slate-700 dark:text-zinc-300 print:text-black">
-                    RM {Number(record.price || record.cost || totalAmount).toFixed(2)}
+                    {formatRM(record.price || record.cost || totalAmount)}
                   </td>
                   <td className="py-3 px-4 text-right font-mono tabular-nums font-semibold text-slate-900 dark:text-zinc-100 print:text-black">
-                    RM {Number(totalAmount).toFixed(2)}
+                    {formatRM(totalAmount)}
                   </td>
                 </tr>
               </tbody>
@@ -164,7 +165,7 @@ export default function VoucherDrawer({
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-black/60 border border-slate-200 dark:border-white/[0.08] shadow-sm dark:shadow-rim space-y-2 text-xs print:bg-white print:border-zinc-300">
             <div className="flex justify-between text-slate-500 dark:text-zinc-400 print:text-zinc-600">
               <span>Jumlah Bersih (Subtotal):</span>
-              <span className="font-mono tabular-nums text-slate-800 dark:text-zinc-200 print:text-black">RM {Number(totalAmount).toFixed(2)}</span>
+              <span className="font-mono tabular-nums text-slate-800 dark:text-zinc-200 print:text-black">{formatRM(totalAmount)}</span>
             </div>
             <div className="flex justify-between text-slate-500 dark:text-zinc-400 print:text-zinc-600">
               <span>Cukai SST / Pelepasan:</span>
@@ -172,7 +173,7 @@ export default function VoucherDrawer({
             </div>
             <div className="pt-2 border-t border-slate-200 dark:border-white/[0.06] print:border-zinc-300 flex justify-between items-baseline font-bold text-sm">
               <span className="text-slate-900 dark:text-white print:text-black">Jumlah Keseluruhan:</span>
-              <span className="font-mono text-emerald-600 dark:text-emerald-400 print:text-emerald-700 text-base">RM {Number(totalAmount).toFixed(2)}</span>
+              <span className="font-mono text-emerald-600 dark:text-emerald-400 print:text-emerald-700 text-base">{formatRM(totalAmount)}</span>
             </div>
           </div>
 

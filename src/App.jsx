@@ -36,12 +36,20 @@ import { useSettings } from './utils/useSettings';
 
 export const formatRM = (n) => 'RM ' + Number(n || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+export const COMPANY_INFO = {
+  name: 'PUNCAK UTAMA SDN BHD',
+  address: 'LEVEL 12, MENARA BANGSAR, NO. 8 JALAN BANGSAR UTAMA 1, 59000 KUALA LUMPUR',
+  contact: 'Tel: +60 3-2282 1199 | E-mel: kewangan@puncakutama.com.my | No. Pendaftaran: 202301038192 (1508821-M)',
+  regNo: '202301038192 (1508821-M)',
+  location: 'Kuala Lumpur, Malaysia',
+  email: 'kewangan@puncakutama.com.my'
+};
+
 export default function App() {
   const { theme, setTheme, language, setLanguage, t } = useSettings();
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showMoreDrawer, setShowMoreDrawer] = useState(false);
   const [drawerState, setDrawerState] = useState({ isOpen: false, record: null, type: 'sale' });
-  const [periodFilter, setPeriodFilter] = useState('all');
   const [activeTab, setActiveTab] = useState(() => {
     if (typeof window !== 'undefined') {
       const param = new URLSearchParams(window.location.search).get('tab');
@@ -709,7 +717,7 @@ export default function App() {
                       {filteredSales.length} {language === 'ms' ? 'rekod' : 'records'}
                     </span>
                   </h4>
-                  <span className="text-xs font-mono tabular-nums text-emerald-600 dark:text-emerald-400">Total: RM {totalSales.toFixed(2)}</span>
+                  <span className="text-xs font-mono tabular-nums text-emerald-600 dark:text-emerald-400">Total: {formatRM(totalSales)}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="relative">
@@ -758,7 +766,7 @@ export default function App() {
                     {language === 'ms' ? 'Belian stok masuk automatik meningkatkan baki inventori semasa.' : 'Incoming stock purchases automatically increase current inventory balance.'}
                   </p>
                 </div>
-                <span className="text-xs font-mono text-amber-600 dark:text-amber-400 font-semibold">Total: RM {totalPurchases.toFixed(2)}</span>
+                <span className="text-xs font-mono text-amber-600 dark:text-amber-400 font-semibold">Total: {formatRM(totalPurchases)}</span>
               </div>
               {/* Desktop Table View */}
               <div className="hidden md:block overflow-x-auto">
@@ -1038,7 +1046,7 @@ export default function App() {
                   <h4 className="text-xs font-semibold text-slate-900 dark:text-white">
                     {language === 'ms' ? 'Buku Rekod Perbelanjaan (Expense Ledger)' : 'Expense Ledger Records'}
                   </h4>
-                  <span className="text-xs font-mono text-rose-600 dark:text-rose-400 font-semibold">Total: RM {totalExpenses.toFixed(2)}</span>
+                  <span className="text-xs font-mono text-rose-600 dark:text-rose-400 font-semibold">Total: {formatRM(totalExpenses)}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="relative">
@@ -1454,12 +1462,12 @@ export default function App() {
                       className={`text-left w-full focus-visible:ring-2 focus-visible:ring-emerald-500 focus:outline-none p-3.5 rounded-xl border cursor-pointer transition-all min-h-[44px] ${
                         selectedVoucherId === e.id 
                           ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-500 text-slate-900 dark:text-white shadow-sm' 
-                          : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-850'
+                          : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'
                       }`}
                     >
                       <div className="flex justify-between items-center">
                         <span className="font-mono font-bold text-slate-900 dark:text-white">{e.voucherNo}</span>
-                        <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">RM {e.amount.toFixed(2)}</span>
+                        <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">{formatRM(e.amount)}</span>
                       </div>
                       <p className="truncate mt-1 text-slate-600 dark:text-slate-300">{e.desc}</p>
                     </button>
@@ -1473,9 +1481,9 @@ export default function App() {
               <div className="lg:col-span-8 rounded-2xl bg-white text-slate-900 p-4 sm:p-8 space-y-4 sm:space-y-6 shadow-xl border border-slate-200 printable-voucher overflow-x-auto">
                 <div className="flex flex-col sm:flex-row justify-between items-start border-b border-slate-300 pb-4 gap-3">
                   <div>
-                    <h3 className="text-lg font-bold text-slate-900 tracking-tight voucher-header-title">PUNCAK UTAMA SDN BHD</h3>
-                    <p className="text-xs text-slate-600">LEVEL 12, MENARA BANGSAR, NO. 8 JALAN BANGSAR UTAMA 1, 59000 KUALA LUMPUR</p>
-                    <p className="text-xs text-slate-600">Tel: +60 3-2282 1199 | E-mel: kewangan@puncakutama.com.my | No. Pendaftaran: 202301038192 (1508821-M)</p>
+                    <h3 className="text-lg font-bold text-slate-900 tracking-tight voucher-header-title">{COMPANY_INFO.name}</h3>
+                    <p className="text-xs text-slate-600">{COMPANY_INFO.address}</p>
+                    <p className="text-xs text-slate-600">{COMPANY_INFO.contact}</p>
                   </div>
                   <div className="text-left sm:text-right">
                     <span className="text-xl font-extrabold text-slate-900">BAUCAR BAYARAN</span>

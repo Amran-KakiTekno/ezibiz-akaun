@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowUpRight, RotateCcw, FileText, CheckCircle2, Clock, XCircle } from 'lucide-react';
+import { formatRM } from '../App';
 
 export default function FinancialDataGrid({
   columns = [],
@@ -106,7 +107,7 @@ export default function FinancialDataGrid({
                             getStatusBadge(val)
                           ) : isMoney ? (
                             <span className="font-mono tabular-nums text-slate-900 dark:text-zinc-100 font-medium">
-                              RM {Number(val || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                              {formatRM(val)}
                             </span>
                           ) : col.isMono ? (
                             <span className="font-mono text-slate-500 dark:text-zinc-400 text-[11px]">{val}</span>
