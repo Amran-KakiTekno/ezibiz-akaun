@@ -1,12 +1,15 @@
-import React from 'react';
+﻿import React from 'react';
 import { ArrowUpRight, RotateCcw, FileText, CheckCircle2, Clock, XCircle } from 'lucide-react';
+import { formatRM } from '../App';
 
 export default function FinancialDataGrid({
   columns = [],
   data = [],
   onSelectRow,
+  onSelect = onSelectRow,
   onVoidRow,
-  emptyMessage = 'Tiada rekod lejar ditemui.'
+  emptyMessage,
+  t
 }) {
   const getStatusBadge = (status) => {
     if (!status) return null;
@@ -14,15 +17,15 @@ export default function FinancialDataGrid({
     
     if (lower.includes('lunas') || lower.includes('paid')) {
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-rim">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shadow-rim">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 dark:bg-emerald-400" />
           <span>{status}</span>
         </span>
       );
     }
     if (lower.includes('hutang') || lower.includes('pending') || lower.includes('pemiutang')) {
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium font-mono bg-amber-500/10 text-amber-300 border border-amber-500/20 shadow-rim">
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium font-mono bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 shadow-rim">
           <Clock className="w-3 h-3" />
           <span>{status}</span>
         </span>
@@ -30,14 +33,14 @@ export default function FinancialDataGrid({
     }
     if (lower.includes('batal') || lower.includes('void')) {
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium font-mono bg-rose-500/10 text-rose-400 border border-rose-500/20 shadow-rim">
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium font-mono bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 shadow-rim">
           <XCircle className="w-3 h-3" />
           <span>{status}</span>
         </span>
       );
     }
     return (
-      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-mono bg-zinc-800 text-zinc-300 border border-white/10">
+      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-mono bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-white/10">
         {status}
       </span>
     );
@@ -57,14 +60,14 @@ export default function FinancialDataGrid({
                   {col.header}
                 </th>
               ))}
-              <th className="py-3.5 px-4 text-right">Tindakan</th>
+              <th className="py-3.5 px-4 text-right">{t ? t('colActions') : 'Tindakan'}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-white/[0.04] text-xs">
             {data.length === 0 ? (
               <tr>
-                <td colSpan={columns.length + 1} className="py-12 text-center text-slate-400 dark:text-zinc-500 font-mono">
-                  {emptyMessage}
+                <td colSpan={columns.length + 1} className="py-12 text-center text-slate-400 dark:text-slate-400 font-mono">
+                  {emptyMessage || (t ? t('emptyLedger') : 'Tiada rekod lejar ditemui.')}
                 </td>
               </tr>
             ) : (
@@ -72,9 +75,18 @@ export default function FinancialDataGrid({
                 const isVoided = row.status?.toLowerCase().includes('batal');
                 return (
                   <tr
-                    key={row.id || row.code || rowIdx}
-                    onClick={() => onSelectRow && onSelectRow(row)}
-                    className={`group transition-colors duration-150 cursor-pointer ${
+                    key={row.id}
+                    tabIndex={0}
+                    aria-label={`Resit ${row.invoiceNo || row.ref}, ${row.customer}, RM ${row.total}`}
+                    onClick={() => (onSelect ? onSelect(row) : onSelectRow && onSelectRow(row))}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        if (onSelect) onSelect(row);
+                        else if (onSelectRow) onSelectRow(row);
+                      }
+                    }}
+                    className={`group transition-colors duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-inset ${
                       isVoided 
                         ? 'opacity-50 hover:bg-rose-50 dark:hover:bg-rose-950/10' 
                         : 'hover:bg-slate-50/80 dark:hover:bg-zinc-900/60'
@@ -96,7 +108,7 @@ export default function FinancialDataGrid({
                             getStatusBadge(val)
                           ) : isMoney ? (
                             <span className="font-mono tabular-nums text-slate-900 dark:text-zinc-100 font-medium">
-                              RM {Number(val || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                              {formatRM(val)}
                             </span>
                           ) : col.isMono ? (
                             <span className="font-mono text-slate-500 dark:text-zinc-400 text-[11px]">{val}</span>
@@ -108,12 +120,12 @@ export default function FinancialDataGrid({
                     })}
                     <td className="py-3 px-4 text-right" onClick={(e) => e.stopPropagation()}>
                       <div className="flex items-center justify-end gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
-                        {onSelectRow && (
+                        {(onSelect || onSelectRow) && (
                           <button
                             type="button"
-                            onClick={() => onSelectRow(row)}
+                            onClick={() => (onSelect ? onSelect(row) : onSelectRow(row))}
                             className="p-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-lg text-slate-400 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
-                            title="Buka Baucar / Invois"
+                            title={t ? t('openVoucherInvoice') : 'Buka Baucar / Invois'}
                           >
                             <FileText className="w-4 h-4" />
                           </button>
@@ -123,7 +135,7 @@ export default function FinancialDataGrid({
                             type="button"
                             onClick={() => onVoidRow(row)}
                             className="p-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-lg text-slate-400 dark:text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
-                            title="Batalkan (Void Transaksi)"
+                            title={t ? t('voidTransaction') : 'Batalkan (Void Transaksi)'}
                           >
                             <RotateCcw className="w-4 h-4" />
                           </button>
@@ -141,3 +153,4 @@ export default function FinancialDataGrid({
     </div>
   );
 }
+

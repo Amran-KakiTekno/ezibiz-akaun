@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { 
   Receipt, 
   Plus, 
@@ -26,19 +26,30 @@ import {
   Search,
   Download,
   Settings,
-  MoreHorizontal
+  MoreHorizontal,
+  XCircle
 } from 'lucide-react';
 import SettingsModal from './components/SettingsModal';
 import FinancialDataGrid from './components/FinancialDataGrid';
 import VoucherDrawer from './components/VoucherDrawer';
 import { useSettings } from './utils/useSettings';
 
+export const formatRM = (n) => 'RM ' + Number(n || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+export const COMPANY_INFO = {
+  name: 'PUNCAK UTAMA SDN BHD',
+  address: 'LEVEL 12, MENARA BANGSAR, NO. 8 JALAN BANGSAR UTAMA 1, 59000 KUALA LUMPUR',
+  contact: 'Tel: +60 3-2282 1199 | E-mel: kewangan@puncakutama.com.my | No. Pendaftaran: 202301038192 (1508821-M)',
+  regNo: '202301038192 (1508821-M)',
+  location: 'Kuala Lumpur, Malaysia',
+  email: 'kewangan@puncakutama.com.my'
+};
+
 export default function App() {
   const { theme, setTheme, language, setLanguage, t } = useSettings();
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showMoreDrawer, setShowMoreDrawer] = useState(false);
   const [drawerState, setDrawerState] = useState({ isOpen: false, record: null, type: 'sale' });
-  const [periodFilter, setPeriodFilter] = useState('all');
   const [activeTab, setActiveTab] = useState(() => {
     if (typeof window !== 'undefined') {
       const param = new URLSearchParams(window.location.search).get('tab');
@@ -80,7 +91,7 @@ export default function App() {
 
   const exportToCSV = (rows, filename) => {
     if (!rows || rows.length === 0) {
-      showToast('Tiada data untuk dieksport.');
+      showToast('Amaran: Tiada data untuk dieksport.');
       return;
     }
     const headers = Object.keys(rows[0]);
@@ -199,6 +210,18 @@ export default function App() {
   const grossProfit = totalSales - totalPurchases;
   const netProfit = grossProfit - totalExpenses;
 
+  // Balance Sheet Calculations
+  const stockValue = calculateTotalInventoryValue();
+  const receivables = calculateTotalDebtors();
+  const payables = calculateTotalCreditors();
+  const capital = 80000;
+  const retainedEarnings = netProfit;
+  const cashInBank = sales.reduce((sum, s) => sum + (s.bayaran || 0), 0) - purchases.reduce((sum, p) => sum + (p.bayaran || 0), 0) - totalExpenses;
+  const cash = cashInBank;
+  const assets = stockValue + receivables + cashInBank;
+  const liabilitiesAndEquity = payables + capital + retainedEarnings;
+  const balanced = Math.abs(assets - liabilitiesAndEquity) < 0.01;
+
   const filteredSales = sales.filter(s => 
     s.customer.toLowerCase().includes(salesSearchQuery.toLowerCase()) ||
     s.ref.toLowerCase().includes(salesSearchQuery.toLowerCase()) ||
@@ -230,7 +253,7 @@ export default function App() {
     const requestedQty = Number(saleForm.qty);
 
     if (requestedQty <= 0) {
-      showToast('Sila masukkan kuantiti jualan yang sah.');
+      showToast('Amaran: Sila masukkan kuantiti jualan yang sah.');
       return;
     }
 
@@ -435,7 +458,7 @@ export default function App() {
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono truncate">
-                    Financial Studio • SME
+                    Financial Studio â€¢ SME
                   </p>
                 </div>
               </div>
@@ -458,7 +481,7 @@ export default function App() {
                     }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500'}`} />
+                      <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-400'}`} />
                       <span className="truncate">{tab.label}</span>
                     </div>
                     {isActive && (
@@ -470,7 +493,7 @@ export default function App() {
             </nav>
           </div>
 
-          {/* Desktop Sidebar Footer: Settings trigger (⚙️) */}
+          {/* Desktop Sidebar Footer: Settings trigger (âš™ï¸) */}
           <div className="pt-4 border-t border-slate-200 dark:border-slate-800 px-1">
             <button
               type="button"
@@ -510,8 +533,8 @@ export default function App() {
       </header>
 
       {/* MAIN CONTAINER */}
-      <div className="md:pl-64 flex-1 flex flex-col min-w-0 pb-24 md:pb-8 px-4 sm:px-6 lg:px-8 py-6">
-        <main className="flex-1 max-w-7xl w-full mx-auto space-y-6">
+      <div className="md:pl-64 flex-1 flex flex-col min-w-0 pb-24 md:pb-8 py-6">
+        <main className="flex-1 max-w-7xl w-full mx-auto space-y-6 px-4 sm:px-6 lg:px-8">
           
           {/* KPI Row */}
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 kpi-row print:hidden">
@@ -552,10 +575,10 @@ export default function App() {
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
-                    {language === 'ms' ? 'Daftar Transaksi Jualan Baharu' : 'Record New Sales Transaction'}
+                    {t('registerNewSale')}
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    {language === 'ms' ? 'Merekod jualan secara automatik menolak kuantiti stok dan mengemaskini lejar penghutang.' : 'Records sales, automatically deducts inventory count, and updates debtor ledger.'}
+                    {t('registerNewSaleSub')}
                   </p>
                 </div>
                 <span className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
@@ -576,13 +599,13 @@ export default function App() {
                 </div>
                 <div className="space-y-1 sm:col-span-2">
                   <label htmlFor="sale-customer" className="text-slate-700 dark:text-slate-300 font-medium">
-                    {language === 'ms' ? 'Nama Pelanggan / Detail' : 'Customer Name / Reference'}
+                    {t('customerNameOrDetail')}
                   </label>
                   <input 
                     id="sale-customer"
                     type="text"
                     required
-                    placeholder={language === 'ms' ? 'e.g. Syarikat Maju Bersama Sdn Bhd' : 'e.g. Apex Global Logistics Sdn Bhd'}
+                    placeholder={t('customerPlaceholder')}
                     value={saleForm.customer}
                     onChange={(e) => setSaleForm({ ...saleForm, customer: e.target.value })}
                     className="w-full px-3 py-2.5 sm:py-1.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white text-base sm:text-xs placeholder-slate-400 dark:placeholder-slate-600 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
@@ -590,7 +613,7 @@ export default function App() {
                 </div>
                 <div className="space-y-1">
                   <label htmlFor="sale-item" className="text-slate-700 dark:text-slate-300 font-medium">
-                    {language === 'ms' ? 'Pilih Produk Inventori' : 'Select Inventory Product'}
+                    {t('selectInventoryProduct')}
                   </label>
                   <select
                     id="sale-item"
@@ -616,7 +639,7 @@ export default function App() {
                         ? 'bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-500/20'
                         : 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20'
                     }`}>
-                      {language === 'ms' ? 'Baki Semasa' : 'Balance'}: {currentStockBalance} {selectedProduct?.unit || 'unit'}
+                      {t('currentBalance')}: {currentStockBalance} {selectedProduct?.unit || 'unit'}
                     </span>
                   </div>
                   <input 
@@ -636,7 +659,7 @@ export default function App() {
                   {isOversell && (
                     <div className="flex items-center gap-1.5 text-[11px] text-red-600 dark:text-red-400 font-medium bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-500/30 p-2 rounded-lg mt-1 animate-in fade-in">
                       <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-red-500" />
-                      <span>{language === 'ms' ? `Amaran: Kuantiti melebihi baki stok semasa (${currentStockBalance} unit)!` : `Warning: Quantity exceeds current stock (${currentStockBalance} units)!`}</span>
+                      <span>{t('warningExceedsStock', { balance: currentStockBalance })}</span>
                     </div>
                   )}
                 </div>
@@ -657,7 +680,7 @@ export default function App() {
                 </div>
                 <div className="space-y-1">
                   <label htmlFor="sale-deposit" className="text-slate-700 dark:text-slate-300 font-medium">
-                    {language === 'ms' ? 'Bayaran / Deposit Diterima (RM)' : 'Payment / Deposit Received (RM)'}
+                    {t('paymentDepositReceived')}
                   </label>
                   <input 
                     id="sale-deposit"
@@ -678,7 +701,7 @@ export default function App() {
                     disabled={isOversell || currentStockBalance <= 0 || Number(saleForm.qty) <= 0}
                     className="w-full py-2.5 sm:py-2 min-h-[44px] rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium text-xs transition-colors shadow-sm shadow-emerald-600/20 cursor-pointer"
                   >
-                    {language === 'ms' ? 'Simpan Rekod Jualan' : 'Save Sales Record'}
+                    {t('saveSalesRecord')}
                   </button>
                 </div>
               </div>
@@ -689,22 +712,23 @@ export default function App() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <h4 className="text-xs font-semibold text-slate-900 dark:text-zinc-100 flex items-center gap-2">
-                    <span>{language === 'ms' ? 'Buku Rekod Jualan (Sales Ledger)' : 'Sales Ledger Records'}</span>
+                    <span>{t('salesLedgerTitle')}</span>
                     <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
-                      {filteredSales.length} {language === 'ms' ? 'rekod' : 'records'}
+                      {filteredSales.length} {t('recordsCount')}
                     </span>
                   </h4>
-                  <span className="text-xs font-mono tabular-nums text-emerald-600 dark:text-emerald-400">Total: RM {totalSales.toFixed(2)}</span>
+                  <span className="text-xs font-mono tabular-nums text-emerald-600 dark:text-emerald-400">Total: {formatRM(totalSales)}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="relative">
-                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500" />
+                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-400" />
                     <input 
                       type="text"
-                      placeholder={language === 'ms' ? 'Cari pelanggan / rujukan...' : 'Search customer / ref...'}
+                      aria-label="Cari pelanggan / rujukan"
+                      placeholder={t('searchSalesPlaceholder')}
                       value={salesSearchQuery}
                       onChange={(e) => setSalesSearchQuery(e.target.value)}
-                      className="pl-8 pr-3 py-2 sm:py-1.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-base sm:text-xs text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 w-full sm:w-56"
+                      className="pl-8 pr-3 py-2 sm:py-1.5 min-h-[44px] sm:min-h-[31px] rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-base sm:text-xs text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 w-full sm:w-56"
                     />
                   </div>
                   <button 
@@ -723,7 +747,8 @@ export default function App() {
                 data={filteredSales}
                 onSelectRow={(row) => handleOpenDrawer(row, 'sale')}
                 onVoidRow={(row) => setVoidTarget({ type: 'sale', item: row })}
-                emptyMessage={salesSearchQuery ? (language === 'ms' ? `Tiada rekod jualan ditemui untuk "${salesSearchQuery}".` : `No sales records found for "${salesSearchQuery}".`) : (language === 'ms' ? "Tiada rekod jualan aktif." : "No active sales records.")}
+                emptyMessage={salesSearchQuery ? t('noExpenseSearchFound', { query: salesSearchQuery }) : (language === 'ms' ? "Tiada rekod jualan aktif." : "No active sales records.")}
+                t={t}
               />
             </div>
           </div>
@@ -742,7 +767,7 @@ export default function App() {
                     {language === 'ms' ? 'Belian stok masuk automatik meningkatkan baki inventori semasa.' : 'Incoming stock purchases automatically increase current inventory balance.'}
                   </p>
                 </div>
-                <span className="text-xs font-mono text-amber-600 dark:text-amber-400 font-semibold">Total: RM {totalPurchases.toFixed(2)}</span>
+                <span className="text-xs font-mono text-amber-600 dark:text-amber-400 font-semibold">Total: {formatRM(totalPurchases)}</span>
               </div>
               {/* Desktop Table View */}
               <div className="hidden md:block overflow-x-auto">
@@ -764,7 +789,7 @@ export default function App() {
                     {purchases.length === 0 ? (
                       <tr>
                         <td colSpan={9} className="p-8 text-center">
-                          <div className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 space-y-2">
+                          <div className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-400 space-y-2">
                             <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400">
                               <ShoppingBag className="w-5 h-5" />
                             </div>
@@ -840,7 +865,7 @@ export default function App() {
               {/* Mobile Stacked Card View */}
               <div className="md:hidden divide-y divide-slate-100 dark:divide-slate-800/60">
                 {purchases.length === 0 ? (
-                  <div className="p-6 text-center text-slate-400 dark:text-slate-500 text-xs">
+                  <div className="p-6 text-center text-slate-400 dark:text-slate-400 text-xs">
                     {language === 'ms' ? 'Tiada Rekod Belian Ditemui' : 'No Purchase Records Found'}
                   </div>
                 ) : (
@@ -850,7 +875,7 @@ export default function App() {
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
                             <span className="font-mono text-xs font-bold text-slate-900 dark:text-white">{p.ref}</span>
-                            <span className="text-[11px] text-slate-500 dark:text-slate-400">• {p.date}</span>
+                            <span className="text-[11px] text-slate-500 dark:text-slate-400">â€¢ {p.date}</span>
                           </div>
                           <h4 className="text-sm font-semibold text-slate-900 dark:text-white mt-0.5 truncate">{p.supplier}</h4>
                         </div>
@@ -1022,17 +1047,18 @@ export default function App() {
                   <h4 className="text-xs font-semibold text-slate-900 dark:text-white">
                     {language === 'ms' ? 'Buku Rekod Perbelanjaan (Expense Ledger)' : 'Expense Ledger Records'}
                   </h4>
-                  <span className="text-xs font-mono text-rose-600 dark:text-rose-400 font-semibold">Total: RM {totalExpenses.toFixed(2)}</span>
+                  <span className="text-xs font-mono text-rose-600 dark:text-rose-400 font-semibold">Total: {formatRM(totalExpenses)}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="relative">
-                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
+                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-400" />
                     <input 
                       type="text"
+                      aria-label="Cari keterangan / kategori"
                       placeholder={language === 'ms' ? 'Cari keterangan / kategori...' : 'Search description / category...'}
                       value={expSearchQuery}
                       onChange={(e) => setExpSearchQuery(e.target.value)}
-                      className="pl-8 pr-3 py-2 sm:py-1.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-base sm:text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 w-full sm:w-56"
+                      className="pl-8 pr-3 py-2 sm:py-1.5 min-h-[44px] sm:min-h-[31px] rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-base sm:text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 w-full sm:w-56"
                     />
                   </div>
                   <button 
@@ -1064,7 +1090,7 @@ export default function App() {
                     {expenses.length === 0 ? (
                       <tr>
                         <td colSpan={8} className="p-8 text-center">
-                          <div className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 space-y-2">
+                          <div className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-400 space-y-2">
                             <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400">
                               <DollarSign className="w-5 h-5" />
                             </div>
@@ -1080,7 +1106,7 @@ export default function App() {
                     ) : filteredExpenses.length === 0 ? (
                       <tr>
                         <td colSpan={8} className="p-8 text-center">
-                          <div className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 space-y-2">
+                          <div className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-400 space-y-2">
                             <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-400">
                               <Search className="w-5 h-5" />
                             </div>
@@ -1164,7 +1190,7 @@ export default function App() {
               {/* Mobile Stacked Card View */}
               <div className="md:hidden divide-y divide-slate-100 dark:divide-slate-800/60">
                 {expenses.length === 0 ? (
-                  <div className="p-6 text-center text-slate-400 dark:text-slate-500 text-xs">
+                  <div className="p-6 text-center text-slate-400 dark:text-slate-400 text-xs">
                     {language === 'ms' ? 'Tiada Rekod Perbelanjaan Ditemui' : 'No Expense Records Found'}
                   </div>
                 ) : filteredExpenses.length === 0 ? (
@@ -1178,7 +1204,7 @@ export default function App() {
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
                             <span className="font-mono text-xs font-bold text-slate-900 dark:text-white">{e.voucherNo}</span>
-                            <span className="text-[11px] text-slate-500 dark:text-slate-400">• {e.date}</span>
+                            <span className="text-[11px] text-slate-500 dark:text-slate-400">â€¢ {e.date}</span>
                           </div>
                           <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 mt-0.5 block">{e.category}</span>
                         </div>
@@ -1255,7 +1281,7 @@ export default function App() {
                     {language === 'ms' ? 'Trek Rekod Inventori (Stok Siap & Bahan Mentah)' : 'Inventory Records (Finished Goods & Materials)'}
                   </h4>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                    {language === 'ms' ? 'Baki Stok = Stok Awal + Stok Masuk - Stok Keluar | Nilaian = Baki × Kos' : 'Balance = Opening + In - Out | Valuation = Balance × Cost'}
+                    {language === 'ms' ? 'Baki Stok = Stok Awal + Stok Masuk - Stok Keluar | Nilaian = Baki Ã— Kos' : 'Balance = Opening + In - Out | Valuation = Balance Ã— Cost'}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -1338,7 +1364,7 @@ export default function App() {
 
               <div className="p-4 space-y-3">
                 {sales.filter(s => s.total > s.bayaran).length === 0 ? (
-                  <div className="p-6 text-center text-slate-400 dark:text-slate-500 space-y-2">
+                  <div className="p-6 text-center text-slate-400 dark:text-slate-400 space-y-2">
                     <CheckCircle2 className="w-8 h-8 text-emerald-500 dark:text-emerald-400/80 mx-auto" />
                     <p className="text-xs font-semibold text-slate-800 dark:text-slate-300">
                       {language === 'ms' ? 'Tiada Baki Penghutang Tertunggak' : 'No Outstanding Debtors'}
@@ -1352,7 +1378,7 @@ export default function App() {
                     <div key={s.id} className="p-3 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs">
                       <div>
                         <p className="font-semibold text-slate-900 dark:text-white">{s.customer}</p>
-                        <p className="text-slate-500 dark:text-slate-400">{s.ref} • {s.date}</p>
+                        <p className="text-slate-500 dark:text-slate-400">{s.ref} â€¢ {s.date}</p>
                       </div>
                       <div className="text-right">
                         <p className="text-rose-600 dark:text-red-400 font-mono font-bold">
@@ -1384,7 +1410,7 @@ export default function App() {
 
               <div className="p-4 space-y-3">
                 {purchases.filter(p => p.total > p.bayaran).length === 0 ? (
-                  <div className="p-6 text-center text-slate-400 dark:text-slate-500 space-y-2">
+                  <div className="p-6 text-center text-slate-400 dark:text-slate-400 space-y-2">
                     <CheckCircle2 className="w-8 h-8 text-emerald-500 dark:text-emerald-400/80 mx-auto" />
                     <p className="text-xs font-semibold text-slate-800 dark:text-slate-300">
                       {language === 'ms' ? 'Tiada Baki Pemiutang Tertunggak' : 'No Outstanding Creditors'}
@@ -1398,7 +1424,7 @@ export default function App() {
                     <div key={p.id} className="p-3 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs">
                       <div>
                         <p className="font-semibold text-slate-900 dark:text-white">{p.supplier}</p>
-                        <p className="text-slate-500 dark:text-slate-400">{p.ref} • {p.date}</p>
+                        <p className="text-slate-500 dark:text-slate-400">{p.ref} â€¢ {p.date}</p>
                       </div>
                       <div className="text-right">
                         <p className="text-rose-600 dark:text-red-400 font-mono font-bold">
@@ -1437,12 +1463,12 @@ export default function App() {
                       className={`text-left w-full focus-visible:ring-2 focus-visible:ring-emerald-500 focus:outline-none p-3.5 rounded-xl border cursor-pointer transition-all min-h-[44px] ${
                         selectedVoucherId === e.id 
                           ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-500 text-slate-900 dark:text-white shadow-sm' 
-                          : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-850'
+                          : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'
                       }`}
                     >
                       <div className="flex justify-between items-center">
                         <span className="font-mono font-bold text-slate-900 dark:text-white">{e.voucherNo}</span>
-                        <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">RM {e.amount.toFixed(2)}</span>
+                        <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">{formatRM(e.amount)}</span>
                       </div>
                       <p className="truncate mt-1 text-slate-600 dark:text-slate-300">{e.desc}</p>
                     </button>
@@ -1456,9 +1482,9 @@ export default function App() {
               <div className="lg:col-span-8 rounded-2xl bg-white text-slate-900 p-4 sm:p-8 space-y-4 sm:space-y-6 shadow-xl border border-slate-200 printable-voucher overflow-x-auto">
                 <div className="flex flex-col sm:flex-row justify-between items-start border-b border-slate-300 pb-4 gap-3">
                   <div>
-                    <h3 className="text-lg font-bold text-slate-900 tracking-tight voucher-header-title">PUNCAK UTAMA SDN BHD</h3>
-                    <p className="text-xs text-slate-600">LEVEL 12, MENARA BANGSAR, NO. 8 JALAN BANGSAR UTAMA 1, 59000 KUALA LUMPUR</p>
-                    <p className="text-xs text-slate-600">Tel: +60 3-2282 1199 | E-mel: kewangan@puncakutama.com.my | No. Pendaftaran: 202301038192 (1508821-M)</p>
+                    <h3 className="text-lg font-bold text-slate-900 tracking-tight voucher-header-title">{COMPANY_INFO.name}</h3>
+                    <p className="text-xs text-slate-600">{COMPANY_INFO.address}</p>
+                    <p className="text-xs text-slate-600">{COMPANY_INFO.contact}</p>
                   </div>
                   <div className="text-left sm:text-right">
                     <span className="text-xl font-extrabold text-slate-900">BAUCAR BAYARAN</span>
@@ -1581,7 +1607,7 @@ export default function App() {
                   <span className="font-semibold text-slate-800 dark:text-slate-300">Tolak: Perbelanjaan Operasi</span>
                   <div className="space-y-1.5 mt-2 pl-3 text-slate-600 dark:text-slate-400">
                     {expenses.length === 0 ? (
-                      <p className="text-slate-400 dark:text-slate-500 italic text-xs py-1">Tiada perbelanjaan operasi direkodkan.</p>
+                      <p className="text-slate-400 dark:text-slate-400 italic text-xs py-1">Tiada perbelanjaan operasi direkodkan.</p>
                     ) : (
                       expenses.map(e => (
                         <div key={e.id} className="flex justify-between">
@@ -1617,40 +1643,26 @@ export default function App() {
 
               <div className="space-y-3 text-xs">
                 <div>
-                  <span className="font-semibold text-slate-900 dark:text-white">Aset Bukan Semasa (Tetap)</span>
-                  <div className="pl-3 mt-1 space-y-1 text-slate-600 dark:text-slate-400">
-                    <div className="flex justify-between">
-                      <span>Kenderaan & Lori Pengangkutan</span>
-                      <span className="font-mono">RM 45,000.00</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Alatan & Mesin Bengkel</span>
-                      <span className="font-mono">RM 18,500.00</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
                   <span className="font-semibold text-slate-900 dark:text-white">Aset Semasa</span>
                   <div className="pl-3 mt-1 space-y-1 text-slate-600 dark:text-slate-400">
                     <div className="flex justify-between">
                       <span>Stok Akhir Inventori</span>
-                      <span className="font-mono text-cyan-600 dark:text-cyan-300">RM {calculateTotalInventoryValue().toFixed(2)}</span>
+                      <span className="font-mono text-cyan-600 dark:text-cyan-300">{formatRM(stockValue)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Penghutang Dagangan</span>
-                      <span className="font-mono text-amber-600 dark:text-amber-400">RM {calculateTotalDebtors().toFixed(2)}</span>
+                      <span className="font-mono text-amber-600 dark:text-amber-400">{formatRM(receivables)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Baki Bank & Tunai di Tangan</span>
-                      <span className="font-mono">RM 24,150.00</span>
+                      <span className="font-mono">{formatRM(cashInBank)}</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex justify-between font-bold text-cyan-700 dark:text-cyan-300">
                   <span>JUMLAH ASET</span>
-                  <span className="font-mono">RM {(63500 + calculateTotalInventoryValue() + calculateTotalDebtors() + 24150).toFixed(2)}</span>
+                  <span className="font-mono">{formatRM(assets)}</span>
                 </div>
 
                 <div className="pt-3 border-t border-slate-200 dark:border-slate-800">
@@ -1658,24 +1670,40 @@ export default function App() {
                   <div className="pl-3 mt-1 space-y-1 text-slate-600 dark:text-slate-400">
                     <div className="flex justify-between">
                       <span>Pemiutang Dagangan (Hutang Supplier)</span>
-                      <span className="font-mono text-rose-600 dark:text-red-400">RM {calculateTotalCreditors().toFixed(2)}</span>
+                      <span className="font-mono text-rose-600 dark:text-red-400">{formatRM(payables)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Modal Awal Pemilik</span>
-                      <span className="font-mono">RM 80,000.00</span>
+                      <span className="font-mono">{formatRM(capital)}</span>
                     </div>
                     <div className="flex justify-between text-emerald-600 dark:text-emerald-400">
                       <span>Untung Bersih Terkumpul</span>
-                      <span className="font-mono">RM {netProfit.toFixed(2)}</span>
+                      <span className="font-mono">{formatRM(retainedEarnings)}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-3 rounded-lg bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-500/30 flex justify-between items-center text-xs font-bold text-indigo-700 dark:text-indigo-300">
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                    <span>Persamaan Perakaunan Seimbang (Imbang Tepat)</span>
-                  </div>
+                <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex justify-between font-bold text-slate-900 dark:text-white">
+                  <span>JUMLAH LIABILITI & EKUITI</span>
+                  <span className="font-mono">{formatRM(liabilitiesAndEquity)}</span>
+                </div>
+
+                <div className="pt-1">
+                  {balanced ? (
+                    <div className="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-500/30 flex justify-between items-center text-xs font-bold text-emerald-700 dark:text-emerald-400">
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                        <span>âœ“ Imbang Tepat</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-500/30 flex justify-between items-center text-xs font-bold text-amber-700 dark:text-amber-300">
+                      <div className="flex items-center gap-1.5">
+                        <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                        <span>Selisih: {formatRM(assets - liabilitiesAndEquity)}</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -1839,7 +1867,7 @@ export default function App() {
           );
         })}
 
-        {/* 5th Tab: More (⋯) Trigger */}
+        {/* 5th Tab: More (â‹¯) Trigger */}
         <button
           type="button"
           onClick={() => setShowMoreDrawer(true)}
@@ -1972,12 +2000,33 @@ export default function App() {
       )}
 
       {/* Floating Toast */}
-      {toastMessage && (
-        <div className="fixed bottom-20 md:bottom-6 right-6 z-50 px-4 py-3 rounded-xl bg-slate-900 border border-emerald-500/40 text-emerald-300 shadow-2xl text-xs flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 toast-notification no-print print:hidden">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
+      {toastMessage && (() => {
+        const isWarning = toastMessage.startsWith('Amaran:');
+        const isError = toastMessage.startsWith('Error:') || toastMessage.startsWith('Ralat:');
+
+        return (
+          <div 
+            role="status" 
+            aria-live="polite"
+            className={`fixed bottom-20 md:bottom-6 right-6 z-50 px-4 py-3 rounded-xl shadow-2xl text-xs flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 toast-notification no-print print:hidden ${
+              isError
+                ? 'bg-slate-900 border border-rose-500/40 text-rose-300'
+                : isWarning
+                ? 'bg-slate-900 border border-amber-500/40 text-amber-300'
+                : 'bg-slate-900 border border-emerald-500/40 text-emerald-300'
+            }`}
+          >
+            {isError ? (
+              <XCircle className="w-4 h-4 text-rose-400 shrink-0" />
+            ) : isWarning ? (
+              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+            ) : (
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            )}
+            <span>{toastMessage}</span>
+          </div>
+        );
+      })()}
 
       {/* SLIDE-OUT VOUCHER & INVOICE DRAWER */}
       <VoucherDrawer 
@@ -2000,3 +2049,4 @@ export default function App() {
     </div>
   );
 }
+
