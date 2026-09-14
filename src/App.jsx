@@ -575,10 +575,10 @@ export default function App() {
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
-                    {language === 'ms' ? 'Daftar Transaksi Jualan Baharu' : 'Record New Sales Transaction'}
+                    {t('registerNewSale')}
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    {language === 'ms' ? 'Merekod jualan secara automatik menolak kuantiti stok dan mengemaskini lejar penghutang.' : 'Records sales, automatically deducts inventory count, and updates debtor ledger.'}
+                    {t('registerNewSaleSub')}
                   </p>
                 </div>
                 <span className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
@@ -599,13 +599,13 @@ export default function App() {
                 </div>
                 <div className="space-y-1 sm:col-span-2">
                   <label htmlFor="sale-customer" className="text-slate-700 dark:text-slate-300 font-medium">
-                    {language === 'ms' ? 'Nama Pelanggan / Detail' : 'Customer Name / Reference'}
+                    {t('customerNameOrDetail')}
                   </label>
                   <input 
                     id="sale-customer"
                     type="text"
                     required
-                    placeholder={language === 'ms' ? 'e.g. Syarikat Maju Bersama Sdn Bhd' : 'e.g. Apex Global Logistics Sdn Bhd'}
+                    placeholder={t('customerPlaceholder')}
                     value={saleForm.customer}
                     onChange={(e) => setSaleForm({ ...saleForm, customer: e.target.value })}
                     className="w-full px-3 py-2.5 sm:py-1.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white text-base sm:text-xs placeholder-slate-400 dark:placeholder-slate-600 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
@@ -613,7 +613,7 @@ export default function App() {
                 </div>
                 <div className="space-y-1">
                   <label htmlFor="sale-item" className="text-slate-700 dark:text-slate-300 font-medium">
-                    {language === 'ms' ? 'Pilih Produk Inventori' : 'Select Inventory Product'}
+                    {t('selectInventoryProduct')}
                   </label>
                   <select
                     id="sale-item"
@@ -639,7 +639,7 @@ export default function App() {
                         ? 'bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-500/20'
                         : 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20'
                     }`}>
-                      {language === 'ms' ? 'Baki Semasa' : 'Balance'}: {currentStockBalance} {selectedProduct?.unit || 'unit'}
+                      {t('currentBalance')}: {currentStockBalance} {selectedProduct?.unit || 'unit'}
                     </span>
                   </div>
                   <input 
@@ -659,7 +659,7 @@ export default function App() {
                   {isOversell && (
                     <div className="flex items-center gap-1.5 text-[11px] text-red-600 dark:text-red-400 font-medium bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-500/30 p-2 rounded-lg mt-1 animate-in fade-in">
                       <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-red-500" />
-                      <span>{language === 'ms' ? `Amaran: Kuantiti melebihi baki stok semasa (${currentStockBalance} unit)!` : `Warning: Quantity exceeds current stock (${currentStockBalance} units)!`}</span>
+                      <span>{t('warningExceedsStock', { balance: currentStockBalance })}</span>
                     </div>
                   )}
                 </div>
@@ -680,7 +680,7 @@ export default function App() {
                 </div>
                 <div className="space-y-1">
                   <label htmlFor="sale-deposit" className="text-slate-700 dark:text-slate-300 font-medium">
-                    {language === 'ms' ? 'Bayaran / Deposit Diterima (RM)' : 'Payment / Deposit Received (RM)'}
+                    {t('paymentDepositReceived')}
                   </label>
                   <input 
                     id="sale-deposit"
@@ -701,7 +701,7 @@ export default function App() {
                     disabled={isOversell || currentStockBalance <= 0 || Number(saleForm.qty) <= 0}
                     className="w-full py-2.5 sm:py-2 min-h-[44px] rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium text-xs transition-colors shadow-sm shadow-emerald-600/20 cursor-pointer"
                   >
-                    {language === 'ms' ? 'Simpan Rekod Jualan' : 'Save Sales Record'}
+                    {t('saveSalesRecord')}
                   </button>
                 </div>
               </div>
@@ -712,9 +712,9 @@ export default function App() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <h4 className="text-xs font-semibold text-slate-900 dark:text-zinc-100 flex items-center gap-2">
-                    <span>{language === 'ms' ? 'Buku Rekod Jualan (Sales Ledger)' : 'Sales Ledger Records'}</span>
+                    <span>{t('salesLedgerTitle')}</span>
                     <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
-                      {filteredSales.length} {language === 'ms' ? 'rekod' : 'records'}
+                      {filteredSales.length} {t('recordsCount')}
                     </span>
                   </h4>
                   <span className="text-xs font-mono tabular-nums text-emerald-600 dark:text-emerald-400">Total: {formatRM(totalSales)}</span>
@@ -725,7 +725,7 @@ export default function App() {
                     <input 
                       type="text"
                       aria-label="Cari pelanggan / rujukan"
-                      placeholder={language === 'ms' ? 'Cari pelanggan / rujukan...' : 'Search customer / ref...'}
+                      placeholder={t('searchSalesPlaceholder')}
                       value={salesSearchQuery}
                       onChange={(e) => setSalesSearchQuery(e.target.value)}
                       className="pl-8 pr-3 py-2 sm:py-1.5 min-h-[44px] sm:min-h-[31px] rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-base sm:text-xs text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 w-full sm:w-56"
@@ -747,7 +747,8 @@ export default function App() {
                 data={filteredSales}
                 onSelectRow={(row) => handleOpenDrawer(row, 'sale')}
                 onVoidRow={(row) => setVoidTarget({ type: 'sale', item: row })}
-                emptyMessage={salesSearchQuery ? (language === 'ms' ? `Tiada rekod jualan ditemui untuk "${salesSearchQuery}".` : `No sales records found for "${salesSearchQuery}".`) : (language === 'ms' ? "Tiada rekod jualan aktif." : "No active sales records.")}
+                emptyMessage={salesSearchQuery ? t('noExpenseSearchFound', { query: salesSearchQuery }) : (language === 'ms' ? "Tiada rekod jualan aktif." : "No active sales records.")}
+                t={t}
               />
             </div>
           </div>

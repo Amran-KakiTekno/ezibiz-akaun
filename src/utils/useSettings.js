@@ -23,25 +23,15 @@ export function useSettings() {
 
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
+    root.classList.toggle('dark', theme === 'dark');
+    root.lang = language;
     try {
       localStorage.setItem(THEME_KEY, theme);
-    } catch (e) {
-      console.warn('Unable to persist theme', e);
-    }
-  }, [theme]);
-
-  useEffect(() => {
-    try {
       localStorage.setItem(LANG_KEY, language);
     } catch (e) {
-      console.warn('Unable to persist language', e);
+      console.warn('Unable to persist settings', e);
     }
-  }, [language]);
+  }, [theme, language]);
 
   const setTheme = (newTheme) => {
     if (newTheme === 'dark' || newTheme === 'light') {

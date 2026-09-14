@@ -8,7 +8,8 @@ export default function FinancialDataGrid({
   onSelectRow,
   onSelect = onSelectRow,
   onVoidRow,
-  emptyMessage = 'Tiada rekod lejar ditemui.'
+  emptyMessage,
+  t
 }) {
   const getStatusBadge = (status) => {
     if (!status) return null;
@@ -59,14 +60,14 @@ export default function FinancialDataGrid({
                   {col.header}
                 </th>
               ))}
-              <th className="py-3.5 px-4 text-right">Tindakan</th>
+              <th className="py-3.5 px-4 text-right">{t ? t('colActions') : 'Tindakan'}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-white/[0.04] text-xs">
             {data.length === 0 ? (
               <tr>
                 <td colSpan={columns.length + 1} className="py-12 text-center text-slate-400 dark:text-zinc-500 font-mono">
-                  {emptyMessage}
+                  {emptyMessage || (t ? t('emptyLedger') : 'Tiada rekod lejar ditemui.')}
                 </td>
               </tr>
             ) : (
@@ -124,7 +125,7 @@ export default function FinancialDataGrid({
                             type="button"
                             onClick={() => (onSelect ? onSelect(row) : onSelectRow(row))}
                             className="p-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-lg text-slate-400 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
-                            title="Buka Baucar / Invois"
+                            title={t ? t('openVoucherInvoice') : 'Buka Baucar / Invois'}
                           >
                             <FileText className="w-4 h-4" />
                           </button>
@@ -134,7 +135,7 @@ export default function FinancialDataGrid({
                             type="button"
                             onClick={() => onVoidRow(row)}
                             className="p-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-lg text-slate-400 dark:text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
-                            title="Batalkan (Void Transaksi)"
+                            title={t ? t('voidTransaction') : 'Batalkan (Void Transaksi)'}
                           >
                             <RotateCcw className="w-4 h-4" />
                           </button>
