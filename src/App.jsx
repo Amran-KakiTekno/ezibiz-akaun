@@ -33,6 +33,8 @@ import FinancialDataGrid from './components/FinancialDataGrid';
 import VoucherDrawer from './components/VoucherDrawer';
 import { useSettings } from './utils/useSettings';
 
+export const formatRM = (n) => 'RM ' + Number(n || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
 export default function App() {
   const { theme, setTheme, language, setLanguage, t } = useSettings();
   const [showSettingsModal, setShowSettingsModal] = useState(false);
@@ -198,6 +200,18 @@ export default function App() {
   const totalExpenses = calculateTotalExpenses();
   const grossProfit = totalSales - totalPurchases;
   const netProfit = grossProfit - totalExpenses;
+
+  // Balance Sheet Calculations
+  const stockValue = calculateTotalInventoryValue();
+  const receivables = calculateTotalDebtors();
+  const payables = calculateTotalCreditors();
+  const capital = 80000;
+  const retainedEarnings = netProfit;
+  const cashInBank = sales.reduce((sum, s) => sum + (s.bayaran || 0), 0) - purchases.reduce((sum, p) => sum + (p.bayaran || 0), 0) - totalExpenses;
+  const cash = cashInBank;
+  const assets = stockValue + receivables + cashInBank;
+  const liabilitiesAndEquity = payables + capital + retainedEarnings;
+  const balanced = Math.abs(assets - liabilitiesAndEquity) < 0.01;
 
   const filteredSales = sales.filter(s => 
     s.customer.toLowerCase().includes(salesSearchQuery.toLowerCase()) ||
@@ -1617,40 +1631,26 @@ export default function App() {
 
               <div className="space-y-3 text-xs">
                 <div>
-                  <span className="font-semibold text-slate-900 dark:text-white">Aset Bukan Semasa (Tetap)</span>
-                  <div className="pl-3 mt-1 space-y-1 text-slate-600 dark:text-slate-400">
-                    <div className="flex justify-between">
-                      <span>Kenderaan & Lori Pengangkutan</span>
-                      <span className="font-mono">RM 45,000.00</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Alatan & Mesin Bengkel</span>
-                      <span className="font-mono">RM 18,500.00</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
                   <span className="font-semibold text-slate-900 dark:text-white">Aset Semasa</span>
                   <div className="pl-3 mt-1 space-y-1 text-slate-600 dark:text-slate-400">
                     <div className="flex justify-between">
                       <span>Stok Akhir Inventori</span>
-                      <span className="font-mono text-cyan-600 dark:text-cyan-300">RM {calculateTotalInventoryValue().toFixed(2)}</span>
+                      <span className="font-mono text-cyan-600 dark:text-cyan-300">{formatRM(stockValue)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Penghutang Dagangan</span>
-                      <span className="font-mono text-amber-600 dark:text-amber-400">RM {calculateTotalDebtors().toFixed(2)}</span>
+                      <span className="font-mono text-amber-600 dark:text-amber-400">{formatRM(receivables)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Baki Bank & Tunai di Tangan</span>
-                      <span className="font-mono">RM 24,150.00</span>
+                      <span className="font-mono">{formatRM(cashInBank)}</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex justify-between font-bold text-cyan-700 dark:text-cyan-300">
                   <span>JUMLAH ASET</span>
-                  <span className="font-mono">RM {(63500 + calculateTotalInventoryValue() + calculateTotalDebtors() + 24150).toFixed(2)}</span>
+                  <span className="font-mono">{formatRM(assets)}</span>
                 </div>
 
                 <div className="pt-3 border-t border-slate-200 dark:border-slate-800">
@@ -1658,24 +1658,40 @@ export default function App() {
                   <div className="pl-3 mt-1 space-y-1 text-slate-600 dark:text-slate-400">
                     <div className="flex justify-between">
                       <span>Pemiutang Dagangan (Hutang Supplier)</span>
-                      <span className="font-mono text-rose-600 dark:text-red-400">RM {calculateTotalCreditors().toFixed(2)}</span>
+                      <span className="font-mono text-rose-600 dark:text-red-400">{formatRM(payables)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Modal Awal Pemilik</span>
-                      <span className="font-mono">RM 80,000.00</span>
+                      <span className="font-mono">{formatRM(capital)}</span>
                     </div>
                     <div className="flex justify-between text-emerald-600 dark:text-emerald-400">
                       <span>Untung Bersih Terkumpul</span>
-                      <span className="font-mono">RM {netProfit.toFixed(2)}</span>
+                      <span className="font-mono">{formatRM(retainedEarnings)}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-3 rounded-lg bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-500/30 flex justify-between items-center text-xs font-bold text-indigo-700 dark:text-indigo-300">
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                    <span>Persamaan Perakaunan Seimbang (Imbang Tepat)</span>
-                  </div>
+                <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex justify-between font-bold text-slate-900 dark:text-white">
+                  <span>JUMLAH LIABILITI & EKUITI</span>
+                  <span className="font-mono">{formatRM(liabilitiesAndEquity)}</span>
+                </div>
+
+                <div className="pt-1">
+                  {balanced ? (
+                    <div className="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-500/30 flex justify-between items-center text-xs font-bold text-emerald-700 dark:text-emerald-400">
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                        <span>✓ Imbang Tepat</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-500/30 flex justify-between items-center text-xs font-bold text-amber-700 dark:text-amber-300">
+                      <div className="flex items-center gap-1.5">
+                        <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                        <span>Selisih: {formatRM(assets - liabilitiesAndEquity)}</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
