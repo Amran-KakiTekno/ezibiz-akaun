@@ -510,8 +510,8 @@ export default function App() {
       </header>
 
       {/* MAIN CONTAINER */}
-      <div className="md:pl-64 flex-1 flex flex-col min-w-0 pb-24 md:pb-8 px-4 sm:px-6 lg:px-8 py-6">
-        <main className="flex-1 max-w-7xl w-full mx-auto space-y-6">
+      <div className="md:pl-64 flex-1 flex flex-col min-w-0 pb-24 md:pb-8 py-6">
+        <main className="flex-1 max-w-7xl w-full mx-auto space-y-6 px-4 sm:px-6 lg:px-8">
           
           {/* KPI Row */}
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 kpi-row print:hidden">
