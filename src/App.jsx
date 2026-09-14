@@ -716,10 +716,11 @@ export default function App() {
                     <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500" />
                     <input 
                       type="text"
+                      aria-label="Cari pelanggan / rujukan"
                       placeholder={language === 'ms' ? 'Cari pelanggan / rujukan...' : 'Search customer / ref...'}
                       value={salesSearchQuery}
                       onChange={(e) => setSalesSearchQuery(e.target.value)}
-                      className="pl-8 pr-3 py-2 sm:py-1.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-base sm:text-xs text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 w-full sm:w-56"
+                      className="pl-8 pr-3 py-2 sm:py-1.5 min-h-[44px] sm:min-h-[31px] rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-base sm:text-xs text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 w-full sm:w-56"
                     />
                   </div>
                   <button 
@@ -1044,10 +1045,11 @@ export default function App() {
                     <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
                     <input 
                       type="text"
+                      aria-label="Cari keterangan / kategori"
                       placeholder={language === 'ms' ? 'Cari keterangan / kategori...' : 'Search description / category...'}
                       value={expSearchQuery}
                       onChange={(e) => setExpSearchQuery(e.target.value)}
-                      className="pl-8 pr-3 py-2 sm:py-1.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-base sm:text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 w-full sm:w-56"
+                      className="pl-8 pr-3 py-2 sm:py-1.5 min-h-[44px] sm:min-h-[31px] rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-base sm:text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 w-full sm:w-56"
                     />
                   </div>
                   <button 
