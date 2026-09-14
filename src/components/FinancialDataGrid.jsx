@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ArrowUpRight, RotateCcw, FileText, CheckCircle2, Clock, XCircle } from 'lucide-react';
 import { formatRM } from '../App';
 
@@ -66,7 +66,7 @@ export default function FinancialDataGrid({
           <tbody className="divide-y divide-slate-100 dark:divide-white/[0.04] text-xs">
             {data.length === 0 ? (
               <tr>
-                <td colSpan={columns.length + 1} className="py-12 text-center text-slate-400 dark:text-zinc-500 font-mono">
+                <td colSpan={columns.length + 1} className="py-12 text-center text-slate-400 dark:text-slate-400 font-mono">
                   {emptyMessage || (t ? t('emptyLedger') : 'Tiada rekod lejar ditemui.')}
                 </td>
               </tr>
@@ -153,3 +153,4 @@ export default function FinancialDataGrid({
     </div>
   );
 }
+

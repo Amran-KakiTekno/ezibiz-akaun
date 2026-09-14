@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { 
   Receipt, 
   Plus, 
@@ -458,7 +458,7 @@ export default function App() {
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono truncate">
-                    Financial Studio • SME
+                    Financial Studio â€¢ SME
                   </p>
                 </div>
               </div>
@@ -481,7 +481,7 @@ export default function App() {
                     }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500'}`} />
+                      <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-400'}`} />
                       <span className="truncate">{tab.label}</span>
                     </div>
                     {isActive && (
@@ -493,7 +493,7 @@ export default function App() {
             </nav>
           </div>
 
-          {/* Desktop Sidebar Footer: Settings trigger (⚙️) */}
+          {/* Desktop Sidebar Footer: Settings trigger (âš™ï¸) */}
           <div className="pt-4 border-t border-slate-200 dark:border-slate-800 px-1">
             <button
               type="button"
@@ -721,7 +721,7 @@ export default function App() {
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="relative">
-                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500" />
+                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-400" />
                     <input 
                       type="text"
                       aria-label="Cari pelanggan / rujukan"
@@ -789,7 +789,7 @@ export default function App() {
                     {purchases.length === 0 ? (
                       <tr>
                         <td colSpan={9} className="p-8 text-center">
-                          <div className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 space-y-2">
+                          <div className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-400 space-y-2">
                             <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400">
                               <ShoppingBag className="w-5 h-5" />
                             </div>
@@ -865,7 +865,7 @@ export default function App() {
               {/* Mobile Stacked Card View */}
               <div className="md:hidden divide-y divide-slate-100 dark:divide-slate-800/60">
                 {purchases.length === 0 ? (
-                  <div className="p-6 text-center text-slate-400 dark:text-slate-500 text-xs">
+                  <div className="p-6 text-center text-slate-400 dark:text-slate-400 text-xs">
                     {language === 'ms' ? 'Tiada Rekod Belian Ditemui' : 'No Purchase Records Found'}
                   </div>
                 ) : (
@@ -875,7 +875,7 @@ export default function App() {
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
                             <span className="font-mono text-xs font-bold text-slate-900 dark:text-white">{p.ref}</span>
-                            <span className="text-[11px] text-slate-500 dark:text-slate-400">• {p.date}</span>
+                            <span className="text-[11px] text-slate-500 dark:text-slate-400">â€¢ {p.date}</span>
                           </div>
                           <h4 className="text-sm font-semibold text-slate-900 dark:text-white mt-0.5 truncate">{p.supplier}</h4>
                         </div>
@@ -1051,7 +1051,7 @@ export default function App() {
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="relative">
-                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
+                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-400" />
                     <input 
                       type="text"
                       aria-label="Cari keterangan / kategori"
@@ -1090,7 +1090,7 @@ export default function App() {
                     {expenses.length === 0 ? (
                       <tr>
                         <td colSpan={8} className="p-8 text-center">
-                          <div className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 space-y-2">
+                          <div className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-400 space-y-2">
                             <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400">
                               <DollarSign className="w-5 h-5" />
                             </div>
@@ -1106,7 +1106,7 @@ export default function App() {
                     ) : filteredExpenses.length === 0 ? (
                       <tr>
                         <td colSpan={8} className="p-8 text-center">
-                          <div className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 space-y-2">
+                          <div className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-400 space-y-2">
                             <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-400">
                               <Search className="w-5 h-5" />
                             </div>
@@ -1190,7 +1190,7 @@ export default function App() {
               {/* Mobile Stacked Card View */}
               <div className="md:hidden divide-y divide-slate-100 dark:divide-slate-800/60">
                 {expenses.length === 0 ? (
-                  <div className="p-6 text-center text-slate-400 dark:text-slate-500 text-xs">
+                  <div className="p-6 text-center text-slate-400 dark:text-slate-400 text-xs">
                     {language === 'ms' ? 'Tiada Rekod Perbelanjaan Ditemui' : 'No Expense Records Found'}
                   </div>
                 ) : filteredExpenses.length === 0 ? (
@@ -1204,7 +1204,7 @@ export default function App() {
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
                             <span className="font-mono text-xs font-bold text-slate-900 dark:text-white">{e.voucherNo}</span>
-                            <span className="text-[11px] text-slate-500 dark:text-slate-400">• {e.date}</span>
+                            <span className="text-[11px] text-slate-500 dark:text-slate-400">â€¢ {e.date}</span>
                           </div>
                           <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 mt-0.5 block">{e.category}</span>
                         </div>
@@ -1281,7 +1281,7 @@ export default function App() {
                     {language === 'ms' ? 'Trek Rekod Inventori (Stok Siap & Bahan Mentah)' : 'Inventory Records (Finished Goods & Materials)'}
                   </h4>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                    {language === 'ms' ? 'Baki Stok = Stok Awal + Stok Masuk - Stok Keluar | Nilaian = Baki × Kos' : 'Balance = Opening + In - Out | Valuation = Balance × Cost'}
+                    {language === 'ms' ? 'Baki Stok = Stok Awal + Stok Masuk - Stok Keluar | Nilaian = Baki Ã— Kos' : 'Balance = Opening + In - Out | Valuation = Balance Ã— Cost'}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -1364,7 +1364,7 @@ export default function App() {
 
               <div className="p-4 space-y-3">
                 {sales.filter(s => s.total > s.bayaran).length === 0 ? (
-                  <div className="p-6 text-center text-slate-400 dark:text-slate-500 space-y-2">
+                  <div className="p-6 text-center text-slate-400 dark:text-slate-400 space-y-2">
                     <CheckCircle2 className="w-8 h-8 text-emerald-500 dark:text-emerald-400/80 mx-auto" />
                     <p className="text-xs font-semibold text-slate-800 dark:text-slate-300">
                       {language === 'ms' ? 'Tiada Baki Penghutang Tertunggak' : 'No Outstanding Debtors'}
@@ -1378,7 +1378,7 @@ export default function App() {
                     <div key={s.id} className="p-3 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs">
                       <div>
                         <p className="font-semibold text-slate-900 dark:text-white">{s.customer}</p>
-                        <p className="text-slate-500 dark:text-slate-400">{s.ref} • {s.date}</p>
+                        <p className="text-slate-500 dark:text-slate-400">{s.ref} â€¢ {s.date}</p>
                       </div>
                       <div className="text-right">
                         <p className="text-rose-600 dark:text-red-400 font-mono font-bold">
@@ -1410,7 +1410,7 @@ export default function App() {
 
               <div className="p-4 space-y-3">
                 {purchases.filter(p => p.total > p.bayaran).length === 0 ? (
-                  <div className="p-6 text-center text-slate-400 dark:text-slate-500 space-y-2">
+                  <div className="p-6 text-center text-slate-400 dark:text-slate-400 space-y-2">
                     <CheckCircle2 className="w-8 h-8 text-emerald-500 dark:text-emerald-400/80 mx-auto" />
                     <p className="text-xs font-semibold text-slate-800 dark:text-slate-300">
                       {language === 'ms' ? 'Tiada Baki Pemiutang Tertunggak' : 'No Outstanding Creditors'}
@@ -1424,7 +1424,7 @@ export default function App() {
                     <div key={p.id} className="p-3 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs">
                       <div>
                         <p className="font-semibold text-slate-900 dark:text-white">{p.supplier}</p>
-                        <p className="text-slate-500 dark:text-slate-400">{p.ref} • {p.date}</p>
+                        <p className="text-slate-500 dark:text-slate-400">{p.ref} â€¢ {p.date}</p>
                       </div>
                       <div className="text-right">
                         <p className="text-rose-600 dark:text-red-400 font-mono font-bold">
@@ -1607,7 +1607,7 @@ export default function App() {
                   <span className="font-semibold text-slate-800 dark:text-slate-300">Tolak: Perbelanjaan Operasi</span>
                   <div className="space-y-1.5 mt-2 pl-3 text-slate-600 dark:text-slate-400">
                     {expenses.length === 0 ? (
-                      <p className="text-slate-400 dark:text-slate-500 italic text-xs py-1">Tiada perbelanjaan operasi direkodkan.</p>
+                      <p className="text-slate-400 dark:text-slate-400 italic text-xs py-1">Tiada perbelanjaan operasi direkodkan.</p>
                     ) : (
                       expenses.map(e => (
                         <div key={e.id} className="flex justify-between">
@@ -1693,7 +1693,7 @@ export default function App() {
                     <div className="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-500/30 flex justify-between items-center text-xs font-bold text-emerald-700 dark:text-emerald-400">
                       <div className="flex items-center gap-1.5">
                         <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                        <span>✓ Imbang Tepat</span>
+                        <span>âœ“ Imbang Tepat</span>
                       </div>
                     </div>
                   ) : (
@@ -1867,7 +1867,7 @@ export default function App() {
           );
         })}
 
-        {/* 5th Tab: More (⋯) Trigger */}
+        {/* 5th Tab: More (â‹¯) Trigger */}
         <button
           type="button"
           onClick={() => setShowMoreDrawer(true)}
@@ -2049,3 +2049,4 @@ export default function App() {
     </div>
   );
 }
+

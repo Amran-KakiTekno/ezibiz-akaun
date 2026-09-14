@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import { X, Printer, Download, CheckCircle2, QrCode, ShieldCheck, ArrowUpRight } from 'lucide-react';
 import { formatRM, COMPANY_INFO } from '../App';
 
@@ -89,19 +89,19 @@ export default function VoucherDrawer({
             <div className="flex justify-between items-start">
               <div>
                 <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-600 dark:text-emerald-400 font-semibold print:text-emerald-700">
-                  EziBiz Akaun • Financial Studio
+                  EziBiz Akaun â€¢ Financial Studio
                 </span>
                 <h2 className="text-lg font-bold text-slate-900 dark:text-white print:text-black mt-1">{COMPANY_INFO.name}</h2>
                 <p className="text-xs text-slate-500 dark:text-zinc-400 print:text-zinc-600 mt-0.5">
                   No. Pendaftaran: {COMPANY_INFO.regNo}
                 </p>
-                <p className="text-xs text-slate-500 dark:text-zinc-500 print:text-zinc-600">
-                  {COMPANY_INFO.location} • {COMPANY_INFO.email}
+                <p className="text-xs text-slate-500 dark:text-slate-400 print:text-zinc-600">
+                  {COMPANY_INFO.location} â€¢ {COMPANY_INFO.email}
                 </p>
               </div>
 
               <div className="text-right space-y-1">
-                <span className="text-[10px] font-mono text-slate-400 dark:text-zinc-500 uppercase">{t ? t('docDate') : 'Tarikh Dokumen'}</span>
+                <span className="text-[10px] font-mono text-slate-400 dark:text-slate-400 uppercase">{t ? t('docDate') : 'Tarikh Dokumen'}</span>
                 <p className="font-mono text-xs text-slate-800 dark:text-zinc-200 font-semibold print:text-black">
                   {record.date || record.tarikh || '2026-09-11'}
                 </p>
@@ -117,14 +117,14 @@ export default function VoucherDrawer({
             {/* Recipient Strip */}
             <div className="pt-4 border-t border-slate-200 dark:border-white/[0.06] print:border-zinc-300 grid grid-cols-2 gap-4 text-xs">
               <div>
-                <span className="text-slate-500 dark:text-zinc-500 text-[10px] uppercase font-mono">{t ? t('paidToOrIssuedFor') : 'Dibayar Kepada / Dikeluarkan Untuk:'}</span>
+                <span className="text-slate-500 dark:text-slate-400 text-[10px] uppercase font-mono">{t ? t('paidToOrIssuedFor') : 'Dibayar Kepada / Dikeluarkan Untuk:'}</span>
                 <p className="font-semibold text-slate-900 dark:text-zinc-100 print:text-black mt-0.5">{partyName}</p>
                 {record.itemCode && (
                   <p className="text-slate-500 dark:text-zinc-400 font-mono text-[11px] mt-0.5">Kod Produk: {record.itemCode}</p>
                 )}
               </div>
               <div className="text-right">
-                <span className="text-slate-500 dark:text-zinc-500 text-[10px] uppercase font-mono">{t ? t('paymentMethodOrRef') : 'Kaedah / Rujukan Bayaran:'}</span>
+                <span className="text-slate-500 dark:text-slate-400 text-[10px] uppercase font-mono">{t ? t('paymentMethodOrRef') : 'Kaedah / Rujukan Bayaran:'}</span>
                 <p className="font-semibold text-slate-900 dark:text-zinc-100 print:text-black mt-0.5">{record.method || record.kaedah || 'Perbankan Internet Maybank'}</p>
                 <p className="text-slate-500 dark:text-zinc-400 font-mono text-[11px] mt-0.5">Ref: {refNumber}</p>
               </div>
@@ -179,7 +179,7 @@ export default function VoucherDrawer({
           </div>
 
           {/* Audit Verification Strip */}
-          <div className="flex items-center justify-between p-3 rounded-lg bg-slate-100 dark:bg-zinc-950 border border-slate-200 dark:border-white/[0.06] text-[11px] text-slate-500 dark:text-zinc-500 font-mono print:border-zinc-300">
+          <div className="flex items-center justify-between p-3 rounded-lg bg-slate-100 dark:bg-zinc-950 border border-slate-200 dark:border-white/[0.06] text-[11px] text-slate-500 dark:text-slate-400 font-mono print:border-zinc-300">
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
               <span>{t ? t('auditVerificationNote') : 'Disahkan Automatik oleh Lejar Pintar EziBiz'}</span>
@@ -193,3 +193,4 @@ export default function VoucherDrawer({
     </div>
   );
 }
+
