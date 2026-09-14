@@ -26,7 +26,8 @@ import {
   Search,
   Download,
   Settings,
-  MoreHorizontal
+  MoreHorizontal,
+  XCircle
 } from 'lucide-react';
 import SettingsModal from './components/SettingsModal';
 import FinancialDataGrid from './components/FinancialDataGrid';
@@ -82,7 +83,7 @@ export default function App() {
 
   const exportToCSV = (rows, filename) => {
     if (!rows || rows.length === 0) {
-      showToast('Tiada data untuk dieksport.');
+      showToast('Amaran: Tiada data untuk dieksport.');
       return;
     }
     const headers = Object.keys(rows[0]);
@@ -244,7 +245,7 @@ export default function App() {
     const requestedQty = Number(saleForm.qty);
 
     if (requestedQty <= 0) {
-      showToast('Sila masukkan kuantiti jualan yang sah.');
+      showToast('Amaran: Sila masukkan kuantiti jualan yang sah.');
       return;
     }
 
@@ -1988,12 +1989,33 @@ export default function App() {
       )}
 
       {/* Floating Toast */}
-      {toastMessage && (
-        <div className="fixed bottom-20 md:bottom-6 right-6 z-50 px-4 py-3 rounded-xl bg-slate-900 border border-emerald-500/40 text-emerald-300 shadow-2xl text-xs flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 toast-notification no-print print:hidden">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
+      {toastMessage && (() => {
+        const isWarning = toastMessage.startsWith('Amaran:');
+        const isError = toastMessage.startsWith('Error:') || toastMessage.startsWith('Ralat:');
+
+        return (
+          <div 
+            role="status" 
+            aria-live="polite"
+            className={`fixed bottom-20 md:bottom-6 right-6 z-50 px-4 py-3 rounded-xl shadow-2xl text-xs flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 toast-notification no-print print:hidden ${
+              isError
+                ? 'bg-slate-900 border border-rose-500/40 text-rose-300'
+                : isWarning
+                ? 'bg-slate-900 border border-amber-500/40 text-amber-300'
+                : 'bg-slate-900 border border-emerald-500/40 text-emerald-300'
+            }`}
+          >
+            {isError ? (
+              <XCircle className="w-4 h-4 text-rose-400 shrink-0" />
+            ) : isWarning ? (
+              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+            ) : (
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            )}
+            <span>{toastMessage}</span>
+          </div>
+        );
+      })()}
 
       {/* SLIDE-OUT VOUCHER & INVOICE DRAWER */}
       <VoucherDrawer 
