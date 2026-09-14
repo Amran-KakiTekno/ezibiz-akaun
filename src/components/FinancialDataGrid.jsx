@@ -5,6 +5,7 @@ export default function FinancialDataGrid({
   columns = [],
   data = [],
   onSelectRow,
+  onSelect = onSelectRow,
   onVoidRow,
   emptyMessage = 'Tiada rekod lejar ditemui.'
 }) {
@@ -72,9 +73,18 @@ export default function FinancialDataGrid({
                 const isVoided = row.status?.toLowerCase().includes('batal');
                 return (
                   <tr
-                    key={row.id || row.code || rowIdx}
-                    onClick={() => onSelectRow && onSelectRow(row)}
-                    className={`group transition-colors duration-150 cursor-pointer ${
+                    key={row.id}
+                    tabIndex={0}
+                    aria-label={`Resit ${row.invoiceNo || row.ref}, ${row.customer}, RM ${row.total}`}
+                    onClick={() => (onSelect ? onSelect(row) : onSelectRow && onSelectRow(row))}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        if (onSelect) onSelect(row);
+                        else if (onSelectRow) onSelectRow(row);
+                      }
+                    }}
+                    className={`group transition-colors duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-inset ${
                       isVoided 
                         ? 'opacity-50 hover:bg-rose-50 dark:hover:bg-rose-950/10' 
                         : 'hover:bg-slate-50/80 dark:hover:bg-zinc-900/60'
@@ -108,10 +118,10 @@ export default function FinancialDataGrid({
                     })}
                     <td className="py-3 px-4 text-right" onClick={(e) => e.stopPropagation()}>
                       <div className="flex items-center justify-end gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
-                        {onSelectRow && (
+                        {(onSelect || onSelectRow) && (
                           <button
                             type="button"
-                            onClick={() => onSelectRow(row)}
+                            onClick={() => (onSelect ? onSelect(row) : onSelectRow(row))}
                             className="p-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-lg text-slate-400 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
                             title="Buka Baucar / Invois"
                           >
