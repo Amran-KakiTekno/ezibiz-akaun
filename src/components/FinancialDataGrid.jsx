@@ -15,15 +15,15 @@ export default function FinancialDataGrid({
     
     if (lower.includes('lunas') || lower.includes('paid')) {
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-rim">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shadow-rim">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 dark:bg-emerald-400" />
           <span>{status}</span>
         </span>
       );
     }
     if (lower.includes('hutang') || lower.includes('pending') || lower.includes('pemiutang')) {
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium font-mono bg-amber-500/10 text-amber-300 border border-amber-500/20 shadow-rim">
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium font-mono bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 shadow-rim">
           <Clock className="w-3 h-3" />
           <span>{status}</span>
         </span>
@@ -31,14 +31,14 @@ export default function FinancialDataGrid({
     }
     if (lower.includes('batal') || lower.includes('void')) {
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium font-mono bg-rose-500/10 text-rose-400 border border-rose-500/20 shadow-rim">
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium font-mono bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 shadow-rim">
           <XCircle className="w-3 h-3" />
           <span>{status}</span>
         </span>
       );
     }
     return (
-      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-mono bg-zinc-800 text-zinc-300 border border-white/10">
+      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-mono bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-white/10">
         {status}
       </span>
     );
